@@ -1,0 +1,17 @@
+api = RiotAPI("5401f52d-7f01-46eb-80c6-a49509a4d9bb")
+
+champs = api.getChampions("na")
+champList = champs.data
+for c in champList:
+    testImage = "http://ddragon.leagueoflegends.com/cdn/img/champion/loading/" + c.key + "_0.jpg"
+    u = urllib.request.urlopen(testImage)
+    raw_data = u.read()
+    u.close()
+
+    ##Feed Image raw data to PIL to change it to something useful
+    p = ImageFile.Parser()
+    p.feed(raw_data)
+    imagePIL = p.close()
+    imagePIL = imagePIL.resize((176,318),Image.ANTIALIAS)
+    imagePIL = imagePIL.crop((0,10,175,200))
+    imagePIL.save("ChampPics/" + c.key + ".jpg")
